@@ -8,7 +8,7 @@ services:
       context: .
       dockerfile: Dockerfile.development
     links:
-      - mail
+      # - mail
       - mysql
       #- postgres
       #- solr
@@ -21,7 +21,7 @@ services:
       - "8443:443"
       - "10022:22"
     volumes:
-      - ./app/:/app/
+      - ./app/:/app/:delegated
       - ./:/docker/
     # cap and privileged needed for slowlog
     cap_add:
@@ -43,10 +43,10 @@ services:
     build:
       context: docker/mysql/
       #dockerfile: MySQL-5.5.Dockerfile
-      dockerfile: MySQL-5.6.Dockerfile
+      #dockerfile: MySQL-5.6.Dockerfile
       #dockerfile: MySQL-5.7.Dockerfile
       #dockerfile: MariaDB-5.5.Dockerfile
-      #dockerfile: MariaDB-10.Dockerfile
+      dockerfile: MariaDB-10.Dockerfile
       #dockerfile: Percona-5.5.Dockerfile
       #dockerfile: Percona-5.6.Dockerfile
       #dockerfile: Percona-5.7.Dockerfile
@@ -146,13 +146,13 @@ services:
   # Mail
   #######################################
   # Mailhog
-  mail:
-     image: mailhog/mailhog
+  # mail:
+  #   image: mailhog/mailhog
    #  ports:
    #    - 8025:8025
-     environment:
-      - VIRTUAL_HOST=mail.boilerplate.docker
-      - VIRTUAL_PORT=8025
+  #   environment:
+  #    - VIRTUAL_HOST=mail.boilerplate.docker
+  #    - VIRTUAL_PORT=8025
 
   # Mailcatcher
   #mail:
@@ -184,19 +184,19 @@ services:
   #######################################
   # phpMyAdmin
   #######################################
-  #phpmyadmin:
-  #  image: phpmyadmin/phpmyadmin
-  #  links:
-  #    - mysql
-  #  environment:
-  #    - PMA_HOSTS=mysql
-  #    #- PMA_USER=root
-  #    - PMA_USER=dev
-  #    - PMA_PASSWORD=dev
-  #    - VIRTUAL_HOST=pma.boilerplate.docker
-  #    - VIRTUAL_PORT=80
-  #  volumes:
-  #    - phpmyadmin:/sessions
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+      - mysql
+    environment:
+      - PMA_HOSTS=mysql
+      #- PMA_USER=root
+      - PMA_USER=dev
+      - PMA_PASSWORD=dev
+      - VIRTUAL_HOST=pma.boilerplate.docker
+      - VIRTUAL_PORT=80
+    volumes:
+      - phpmyadmin:/sessions
 
 volumes:
   mysql:
